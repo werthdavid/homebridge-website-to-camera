@@ -1,0 +1,37 @@
+{
+  "name": "homebridge-website-to-camera",
+  "version": "1.0.0",
+  "description": "shows the screenshot of a website as camera (image)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/werthdavid/homebridge-website-to-camera.git"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "homebridge-camera",
+    "camera",
+    "phantom",
+    "screenshot",
+    "virtual",
+    "maps",
+    "traffic"
+  ],
+  "author": "David Werth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/werthdavid/homebridge-website-to-camera/issues"
+  },
+  "engines": {
+    "homebridge": ">=0.2.0",
+    "node": ">=4.2.0"
+  },
+  "homepage": "https://github.com/werthdavid/homebridge-website-to-camera#readme",
+  "dependencies": {
+    "ip": "^1.1.5",
+    "capture-phantomjs": "^1.4.2"
+  }
+}

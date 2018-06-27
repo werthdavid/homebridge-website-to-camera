@@ -1,0 +1,25 @@
+{
+  "bridge": {
+    "name": "Homebirdge",
+    "username": "CC:22:3D:E3:CE:33",
+    "port": 51826,
+    "pin": "012-34-567"
+  },
+  "description": "Homebridge Example",
+  "accessories": [
+  ],
+  "platforms": [
+    {
+      "platform": "website-to-camera",
+      "cameras": [
+        {
+          "name": "Google Maps Traffic",
+          "url": "",
+          "renderDelay": 2000,
+          "width": 1280,
+          "height": 800
+        }
+      ]
+    }
+  ]
+}
