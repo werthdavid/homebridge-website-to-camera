@@ -9,12 +9,12 @@
 
 # Installation
 
-1. Install Homebridge using: `(sudo) npm install -g --unsafe-perm homebridge` if you haven't already
-2. Install this plugin using: `(sudo) npm install -g homebridge-website-to-camera`
-3. Update your Homebridge `config.json` using the sample below (append in the block 'platforms' not 'accessories')
-4. If you're using this on ARM/Raspberry Pi: Download the latest [phantomjs-on-raspberry](https://github.com/fg2it/phantomjs-on-raspberry)
+1. (Install Homebridge using: `(sudo) npm install -g --unsafe-perm homebridge` if you haven't already)
+2. If you're using this on ARM/Raspberry Pi: Download the latest [phantomjs-on-raspberry](https://github.com/fg2it/phantomjs-on-raspberry)
 * `wget https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-wheezy-jessie-armv6/phantomjs_2.1.1_armhf.deb`
 * `sudo dpkg -i phantomjs_2.1.1_armhf.deb`
+3. Install this plugin using: `(sudo) npm install -g homebridge-website-to-camera`
+4. Update your Homebridge `config.json` using the sample below (append in the block 'platforms' not 'accessories')
 
 
 In some cases, the camera is not visible in Home-App:
