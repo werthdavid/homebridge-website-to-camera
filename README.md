@@ -20,7 +20,7 @@
 In some cases, the camera is not visible in Home-App:
 * Press + on top right corner in Home-App
 * Press `Add device`
-* Pres `Code missing`
+* Press `Code missing`
 * Select Camera
 
 # Configuration
