@@ -1,6 +1,6 @@
 {
   "name": "homebridge-website-to-camera",
-  "version": "1.0.3",
+  "version": "1.0.8",
   "description": "shows the screenshot of a website as camera (image)",
   "main": "index.js",
   "scripts": {
@@ -32,7 +32,6 @@
   "homepage": "https://github.com/werthdavid/homebridge-website-to-camera#readme",
   "dependencies": {
     "ip": "^1.1.5",
-    "phantomjs": "^2.1.7",
     "capture-phantomjs": "^1.4.2"
   }
 }
