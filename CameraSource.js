@@ -1,8 +1,8 @@
 "use strict";
 
-var ip = require("ip");
-var crypto = require("crypto");
-var capture = require("capture-phantomjs");
+let ip = require("ip");
+let crypto = require("crypto");
+let screenshotHelper = require("./ScreenshotHelper");
 
 module.exports = Camera;
 
@@ -16,7 +16,7 @@ function Camera(hap, conf, log) {
     this.pendingSessions = {};
     this.ongoingSessions = {};
 
-    var options = {
+    let options = {
         proxy: false, // Requires RTP/RTCP MUX Proxy
         disable_audio_proxy: false, // If proxy = true, you can opt out audio proxy via this
         srtp: true, // Supports SRTP AES_CM_128_HMAC_SHA1_80 encryption
@@ -58,13 +58,7 @@ function Camera(hap, conf, log) {
 }
 
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
-    capture({
-        url: this.conf.url,
-        width: this.conf.width || 640,
-        height: this.conf.height || 360,
-        wait: this.conf.renderDelay || 0,
-        format: "jpg"
-    })
+    screenshotHelper.getScreenshot(this.conf.url, this.conf.width || 640, this.conf.height || 360, this.conf.chromiumPath)
         .then(
             img => {
                 callback(null, img);
@@ -82,67 +76,61 @@ Camera.prototype.handleCloseConnection = function (connectionID) {
 
 Camera.prototype.prepareStream = function (request, callback) {
     // Invoked when iOS device requires stream
-    var sessionInfo = {};
+    let sessionInfo = {};
 
-    var sessionID = request.sessionID;
-    var targetAddress = request.targetAddress;
+    let sessionID = request.sessionID;
+    sessionInfo.address = request.targetAddress;
 
-    sessionInfo.address = targetAddress;
+    let response = {};
 
-    var response = {};
-
-    var videoInfo = request.video;
+    let videoInfo = request.video;
     if (videoInfo) {
-        var targetPort = videoInfo.port;
-        var srtpKey = videoInfo.srtp_key;
-        var srtpSalt = videoInfo.srtp_salt;
+        let targetPort = videoInfo.port;
+        let srtpKey = videoInfo.srtp_key;
+        let srtpSalt = videoInfo.srtp_salt;
 
         // SSRC is a 32 bit integer that is unique per stream
-        var ssrcSource = crypto.randomBytes(4);
+        let ssrcSource = crypto.randomBytes(4);
         ssrcSource[0] = 0;
-        var ssrc = ssrcSource.readInt32BE(0, true);
+        let ssrc = ssrcSource.readInt32BE(0, true);
 
-        var videoResp = {
+        response.video = {
             port: targetPort,
             ssrc: ssrc,
             srtp_key: srtpKey,
             srtp_salt: srtpSalt
         };
-
-        response.video = videoResp;
 
         sessionInfo.video_port = targetPort;
         sessionInfo.video_srtp = Buffer.concat([srtpKey, srtpSalt]);
         sessionInfo.video_ssrc = ssrc;
     }
 
-    var audioInfo = request.audio;
+    let audioInfo = request.audio;
     if (audioInfo) {
-        var targetPort = audioInfo.port;
-        var srtpKey = audioInfo.srtp_key;
-        var srtpSalt = audioInfo.srtp_salt;
+        let targetPort = audioInfo.port;
+        let srtpKey = audioInfo.srtp_key;
+        let srtpSalt = audioInfo.srtp_salt;
 
         // SSRC is a 32 bit integer that is unique per stream
-        var ssrcSource = crypto.randomBytes(4);
+        let ssrcSource = crypto.randomBytes(4);
         ssrcSource[0] = 0;
-        var ssrc = ssrcSource.readInt32BE(0, true);
+        let ssrc = ssrcSource.readInt32BE(0, true);
 
-        var audioResp = {
+        response.audio = {
             port: targetPort,
             ssrc: ssrc,
             srtp_key: srtpKey,
             srtp_salt: srtpSalt
         };
 
-        response.audio = audioResp;
-
         sessionInfo.audio_port = targetPort;
         sessionInfo.audio_srtp = Buffer.concat([srtpKey, srtpSalt]);
         sessionInfo.audio_ssrc = ssrc;
     }
 
-    var currentAddress = ip.address();
-    var addressResp = {
+    let currentAddress = ip.address();
+    let addressResp = {
         address: currentAddress
     };
 
@@ -159,12 +147,12 @@ Camera.prototype.prepareStream = function (request, callback) {
 };
 
 Camera.prototype.handleStreamRequest = function (request) {
-    var sessionID = request.sessionID;
-    var requestType = request.type;
+    let sessionID = request.sessionID;
+    let requestType = request.type;
     if (!sessionID) {
         return;
     }
-    var sessionIdentifier = this.hap.uuid.unparse(sessionID);
+    let sessionIdentifier = this.hap.uuid.unparse(sessionID);
 
     if (requestType === "start" && this.pendingSessions[sessionIdentifier]) {
 
@@ -179,16 +167,15 @@ Camera.prototype.handleStreamRequest = function (request) {
 };
 
 Camera.prototype.createCameraControlService = function () {
-    var controlService = new this.hap.Service.CameraControl();
+    let controlService = new this.hap.Service.CameraControl();
     this.services.push(controlService);
 };
 
 Camera.prototype._createStreamControllers = function (maxStreams, options) {
-    var self = this;
-    for (var i = 0; i < maxStreams; i += 1) {
-        var streamController = new this.hap.StreamController(i, options, self);
+    let self = this;
+    for (let i = 0; i < maxStreams; i += 1) {
+        let streamController = new this.hap.StreamController(i, options, self);
         self.services.push(streamController.service);
         self.streamControllers.push(streamController);
     }
 };
-
