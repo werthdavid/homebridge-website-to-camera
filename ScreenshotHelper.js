@@ -12,7 +12,13 @@ function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser") 
 ScreenshotHelper.prototype.getScreenshot = async function (width, height) {
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
-        this.browser = await puppeteer.launch({executablePath: this.chromiumPath});
+        this.browser = await puppeteer.launch(
+            {
+                executablePath: this.chromiumPath,
+                headless: true,
+                args: ['--no-sandbox'] // required if homebridge is started as root-user
+            }
+        );
         this.log("Chromium started");
     }
     this.log("Opening new page");
