@@ -28,14 +28,14 @@ Update your config similar to this:
             {
                "name": "Website 1",
                "url": "http://github.com",
-               "width": 800,
-               "height": 400,
                "chromiumPath": "/usr/bin/chromium-browser"
             }
          ]
       }
    ]
 ```
+
+**You can add multiple cameras!**
 
 ## Config file
 
@@ -47,8 +47,9 @@ Fields:
 
 * `name` name of the camera (required)
 * `url` the URL of the website that is to be captured (required)
-* `width` the width of the virtual browser window (defaults to 640)
-* `height` the height of the virtual browser window (defaults to 360)
+* `scale` HomeApp requests an (probably device dependent) size for the preview-image. 
+With e.g. `scale` set to `2` (default) the virtual browser window is set to this size. Best is to skip this field.
+* OR `width` / `height` the width/height of the virtual browser window. This is optional and overrides `scale`.
 * `chromiumPath` path to chromium-executable (defaults to "/usr/bin/chromium-browser")
 
 
@@ -66,4 +67,4 @@ The plugin uses Puppeteer/Chrome headless to capture the screenshots. The Browse
 
 # TODO
 
-* Live-Video not working yet
+* Live-Video not working. As far as I understood HomeKit requires an RTSP-stream where it can connect to. So this feature might not come at all.

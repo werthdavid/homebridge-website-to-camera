@@ -12,7 +12,7 @@ function Camera(hap, conf, log) {
     this.conf = conf;
     this.services = [];
     this.streamControllers = [];
-    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.width, conf.height, conf.chromiumPath)
+    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath)
 
     this.pendingSessions = {};
     this.ongoingSessions = {};
@@ -59,12 +59,16 @@ function Camera(hap, conf, log) {
 }
 
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
-    this.screenshotHelper.getScreenshot()
+    let width = this.conf.width || (request.width * (this.conf.scale || 2));
+    let height = this.conf.height || (request.height * (this.conf.scale || 2));
+    this.screenshotHelper.getScreenshot(width, height)
         .then(
             img => {
+                this.log("Got screenshot");
                 callback(null, img);
             },
             reason => {
+                this.log(reason);
                 callback(reason);
             })
 };

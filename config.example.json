@@ -14,10 +14,14 @@
       "cameras": [
         {
           "name": "Google Maps Traffic",
-          "url": "",
-          "renderDelay": 2000,
-          "width": 1280,
-          "height": 800
+          "url": "http://google.com",
+          "height": 1334,
+          "width": 750
+        },
+        {
+          "name": "Google Maps Traffic #2",
+          "url": "http://google.com",
+          "scale": 1
         }
       ]
     }
