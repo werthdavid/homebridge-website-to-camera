@@ -2,7 +2,7 @@
 
 let ip = require("ip");
 let crypto = require("crypto");
-let screenshotHelper = require("./ScreenshotHelper");
+let ScreenshotHelper = require("./ScreenshotHelper");
 
 module.exports = Camera;
 
@@ -12,6 +12,7 @@ function Camera(hap, conf, log) {
     this.conf = conf;
     this.services = [];
     this.streamControllers = [];
+    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.width, conf.height, conf.chromiumPath)
 
     this.pendingSessions = {};
     this.ongoingSessions = {};
@@ -58,7 +59,7 @@ function Camera(hap, conf, log) {
 }
 
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
-    screenshotHelper.getScreenshot(this.conf.url, this.conf.width || 640, this.conf.height || 360, this.conf.chromiumPath)
+    this.screenshotHelper.getScreenshot()
         .then(
             img => {
                 callback(null, img);

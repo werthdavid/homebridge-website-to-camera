@@ -12,6 +12,7 @@
 Make sure you have homebridge installed.
 
 1. Download the latest Chromium `sudo apt-get install chromium-browser`
+2. Verify the Chromium installation by running `chromium-browser`, output should be similar to `(chromium-browser:30533): Gtk-WARNING **: cannot open display`
 3. Install this plugin using: ` echo "export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && npm install -g homebridge-website-to-camera" | sudo sh`
 4. Update your Homebridge `config.json` using the sample below (append in the block 'platforms' not 'accessories')
 

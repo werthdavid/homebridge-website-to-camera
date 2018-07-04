@@ -1,6 +1,6 @@
 {
   "name": "homebridge-website-to-camera",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "shows the screenshot of a website as camera (image)",
   "main": "index.js",
   "scripts": {
@@ -18,9 +18,17 @@
     "screenshot",
     "virtual",
     "maps",
-    "traffic"
+    "traffic",
+    "chromium",
+    "chrome",
+    "puppeteer"
   ],
-  "author": "David Werth",
+  "authors": [
+    {
+      "name": "David Werth",
+      "email": "werth.david@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/werthdavid/homebridge-website-to-camera/issues"
