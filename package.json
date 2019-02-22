@@ -1,6 +1,6 @@
 {
   "name": "homebridge-website-to-camera",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "shows the screenshot of a website as camera (image)",
   "main": "index.js",
   "scripts": {
@@ -40,6 +40,6 @@
   "homepage": "https://github.com/werthdavid/homebridge-website-to-camera#readme",
   "dependencies": {
     "ip": "^1.1.5",
-    "puppeteer-core": "^1.11.0"
+    "puppeteer-core": "1.11.0"
   }
 }
