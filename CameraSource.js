@@ -12,7 +12,7 @@ function Camera(hap, conf, log) {
     this.conf = conf;
     this.services = [];
     this.streamControllers = [];
-    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath)
+    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath);
 
     this.pendingSessions = {};
     this.ongoingSessions = {};
@@ -61,7 +61,8 @@ function Camera(hap, conf, log) {
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
     let width = this.conf.width || (request.width * (this.conf.scale || 2));
     let height = this.conf.height || (request.height * (this.conf.scale || 2));
-    this.screenshotHelper.getScreenshot(width, height)
+    let timeout = this.conf.timeout || 10000;
+    this.screenshotHelper.getScreenshot(width, height, timeout)
         .then(
             img => {
                 this.log("Got screenshot");
@@ -162,7 +163,7 @@ Camera.prototype.handleStreamRequest = function (request) {
     if (requestType === "start" && this.pendingSessions[sessionIdentifier]) {
 
         // TODO Implement "live" update mechanism
-        this.ongoingSessions[sessionIdentifier] = undefined
+        this.ongoingSessions[sessionIdentifier] = undefined;
 
         delete this.pendingSessions[sessionIdentifier];
     }

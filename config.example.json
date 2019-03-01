@@ -16,7 +16,8 @@
           "name": "Google Maps Traffic",
           "url": "http://google.com",
           "height": 1334,
-          "width": 750
+          "width": 750,
+          "timeout": 10000
         },
         {
           "name": "Google Maps Traffic #2",

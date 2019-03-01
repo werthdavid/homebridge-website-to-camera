@@ -9,7 +9,7 @@ function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser") 
     this.log("Initialized ScreenshotHelper");
 }
 
-ScreenshotHelper.prototype.getScreenshot = async function (width, height) {
+ScreenshotHelper.prototype.getScreenshot = async function (width, height, timeout) {
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
         this.browser = await puppeteer.launch(
@@ -26,7 +26,7 @@ ScreenshotHelper.prototype.getScreenshot = async function (width, height) {
     this.log("Setting Viewport to " + width + "x" + height);
     await page.setViewport({width: width, height: height});
     this.log("Going to page: " + this.url);
-    await page.goto(this.url, {waitUntil: 'networkidle0', timeout: 10000});
+    await page.goto(this.url, {waitUntil: 'networkidle2', timeout: timeout});
     const screenshot = await page.screenshot({type: "jpeg"});
     this.log("Created screenshot");
     page.close();
