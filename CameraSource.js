@@ -61,8 +61,9 @@ function Camera(hap, conf, log) {
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
     let width = this.conf.width || (request.width * (this.conf.scale || 2));
     let height = this.conf.height || (request.height * (this.conf.scale || 2));
-    let timeout = this.conf.timeout || 10000;
-    this.screenshotHelper.getScreenshot(width, height, timeout)
+    let networkTimeout = this.conf.timeout || 10000;
+    let renderTimeout = this.conf.renderTimeout || 1;
+    this.screenshotHelper.getScreenshot(width, height, networkTimeout, renderTimeout)
         .then(
             img => {
                 this.log("Got screenshot");

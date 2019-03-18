@@ -52,6 +52,7 @@ With e.g. `scale` set to `2` (default) the virtual browser window is set to this
 * OR `width` / `height` the width/height of the virtual browser window. This is optional and overrides `scale`.
 * `chromiumPath` path to chromium-executable (defaults to "/usr/bin/chromium-browser")
 * `timeout` timeout in ms for waiting until the page has no more pending requests. resembles to puppeteer.goto() (defaults to 10000 --> 10s)
+* `renderTimeout` timeout in ms for waiting AFTER the page has loaded before taking the screenshot. userful for PWAs. (defaults to 1ms)
 
 
 # Usage
