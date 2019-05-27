@@ -10,7 +10,7 @@
   ],
   "platforms": [
     {
-      "platform": "website-to-camera",
+      "platform": "website-camera",
       "cameras": [
         {
           "name": "Google Maps Traffic",

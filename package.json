@@ -1,6 +1,6 @@
 {
   "name": "homebridge-website-to-camera",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "shows the screenshot of a website as camera (image)",
   "main": "index.js",
   "scripts": {
