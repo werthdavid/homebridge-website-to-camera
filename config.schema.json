@@ -1,0 +1,58 @@
+{
+  "pluginAlias": "website-camera",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Homebridge plugin for displaying a Website as Camera.",
+  "footerDisplay": "Visit the [Project Page](https://github.com/werthdavid/homebridge-website-to-camera) if you have more questions.",
+  "schema": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "platform": {
+        "type": "string"
+      },
+      "cameras": {
+        "type": "array",
+        "additionalItems": true,
+        "items": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string"
+            },
+            "url": {
+              "title": "URL",
+              "type": "string"
+            },
+            "height": {
+              "title": "Height",
+              "type": "integer"
+            },
+            "width": {
+              "title": "Width",
+              "type": "integer"
+            },
+            "timeout": {
+              "title": "Timeout",
+              "type": "integer"
+            },
+            "renderTimeout": {
+              "titel": "Render Timeout",
+              "type": "integer"
+            },
+            "scale": {
+              "title": "Scale",
+              "type": "integer"
+            },
+            "chromiumPath": {
+              "title": "Chromium Path",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
