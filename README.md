@@ -46,6 +46,7 @@ Take a look at the <a href="config.example.json">example config.json</a>
 Fields:
 
 * `name` name of the camera (required)
+* `id` unique(!) identifier for that specific camera (optional)
 * `url` the URL of the website that is to be captured (required)
 * `scale` HomeApp requests an (probably device dependent) size for the preview-image. 
 With e.g. `scale` set to `2` (default) the virtual browser window is set to this size. Best is to skip this field.
