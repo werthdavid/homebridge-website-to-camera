@@ -10,8 +10,11 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
         // Generate id from name
         if (id === "") {
             for (let i = 0; i < name.length; i++) {
-                id += name.charCodeAt(i)
+                id += name.charCodeAt(i).toString(10);
             }
+        }
+        if (id.length > 12) {
+            id = id.substr(0, 12);
         }
         var uuid = hap.uuid.generate("homebridge-website-to-camera:" + id);
         super(name, uuid, hap.Accessory.Categories.CAMERA);
