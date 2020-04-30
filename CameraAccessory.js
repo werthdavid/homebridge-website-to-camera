@@ -25,7 +25,9 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
             .setCharacteristic(hap.Characteristic.FirmwareRevision, packageJSON.version);
         this.on("identify", function (paired, callback) {
             log("identify");
-            callback();
+            if (!!callback) {
+                callback();
+            }
         });
         var cameraSource = new CameraSource(hap, conf, log);
         this.configureCameraSource(cameraSource);
