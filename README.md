@@ -7,6 +7,12 @@
 
 <img width="350" src="https://werthdavid.github.io/homebridge-website-to-camera/sample.png">
 
+
+
+If you find my work useful you can buy me a coffee, I am very thankful for your support. 
+
+<a href="https://www.buymeacoffee.com/werthdavid" target="_blank"><img width="140" src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee"></a>
+
 # Installation
 
 Make sure you have homebridge installed.
