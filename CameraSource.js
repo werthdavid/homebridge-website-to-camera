@@ -12,7 +12,7 @@ function Camera(hap, conf, log) {
     this.conf = conf;
     this.services = [];
     this.streamControllers = [];
-    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath);
+    this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath, conf.ignoreHTTPSErrors);
 
     this.pendingSessions = {};
     this.ongoingSessions = {};

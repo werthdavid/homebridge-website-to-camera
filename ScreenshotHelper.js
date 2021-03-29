@@ -1,11 +1,13 @@
 const puppeteer = require('puppeteer-core');
+const username = require('username');
 
 module.exports = ScreenshotHelper;
 
-function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser") {
+function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser", ignoreHTTPSErrors = false) {
     this.log = log;
     this.url = url;
     this.chromiumPath = chromiumPath;
+    this.ignoreHTTPSErrors = ignoreHTTPSErrors;
     this.log("Initialized ScreenshotHelper");
 }
 
@@ -16,11 +18,13 @@ ScreenshotHelper.prototype.sleep = function timeout(ms) {
 ScreenshotHelper.prototype.getScreenshot = async function (width, height, networkTimeout, renderTimeout) {
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
+        const isRoot = username.sync() === "root";
         this.browser = await puppeteer.launch(
             {
                 executablePath: this.chromiumPath,
                 headless: true,
-                args: ['--no-sandbox'] // required if homebridge is started as root-user
+                ignoreHTTPSErrors: this.ignoreHTTPSErrors,
+                args: isRoot ? ['--no-sandbox'] : []
             }
         );
         this.log("Chromium started");
