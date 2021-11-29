@@ -16,6 +16,8 @@ function Camera(hap, conf, log) {
 
     this.pendingSessions = {};
     this.ongoingSessions = {};
+    this.cachedImage = undefined;
+    this.lastSnapshotTime = undefined;
 
     let options = {
         proxy: false, // Requires RTP/RTCP MUX Proxy
@@ -59,14 +61,25 @@ function Camera(hap, conf, log) {
 }
 
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
-    let width = this.conf.width || (request.width * (this.conf.scale || 2));
-    let height = this.conf.height || (request.height * (this.conf.scale || 2));
+    let width = this.conf.width || (request.width * (this.conf.scale || 1.5));
+    let height = this.conf.height || (request.height * (this.conf.scale || 1.5));
     let networkTimeout = this.conf.timeout || 10000;
     let renderTimeout = this.conf.renderTimeout || 1;
+
+    if (this.conf.cacheTime > 0 & !!this.cachedImage && this.conf.cacheTime < new Date().getTime() - this.lastSnapshotTime) {
+        this.log("Returning cached image");
+        callback(null, this.cachedImage);
+        return;
+    }
+
     this.screenshotHelper.getScreenshot(width, height, networkTimeout, renderTimeout)
         .then(
             img => {
                 this.log("Got screenshot");
+                this.lastSnapshotTime = new Date().getTime();
+                if (this.conf.cacheTime > 0) {
+                    this.cachedImage = img;
+                }
                 callback(null, img);
             },
             reason => {
@@ -151,6 +164,10 @@ Camera.prototype.prepareStream = function (request, callback) {
     this.pendingSessions[this.hap.uuid.unparse(sessionID)] = sessionInfo;
 
     callback(response);
+    this.handleSnapshotRequest({
+        width: 800,
+        height: 600
+    }, () => {});
 };
 
 Camera.prototype.handleStreamRequest = function (request) {
