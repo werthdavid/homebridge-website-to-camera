@@ -66,8 +66,10 @@ Camera.prototype.handleSnapshotRequest = function (request, callback) {
     let networkTimeout = this.conf.timeout || 10000;
     let renderTimeout = this.conf.renderTimeout || 1;
 
-    if (this.conf.cacheTime > 0 & !!this.cachedImage && this.conf.cacheTime < new Date().getTime() - this.lastSnapshotTime) {
+    if (this.conf.cacheTime > 0 & !!this.cachedImage && (new Date().getTime() - this.lastSnapshotTime) < (this.conf.cacheTime * 1000)) {
         this.log("Returning cached image");
+        this.log.debug("Cached Time:", this.conf.cacheTime);
+        this.log.debug("lastSnapshotTime:", this.lastSnapshotTime);
         callback(null, this.cachedImage);
         return;
     }
