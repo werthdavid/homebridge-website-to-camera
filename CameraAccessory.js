@@ -1,6 +1,7 @@
 "use strict";
 const packageJSON = require("./package.json");
 const CameraSource = require("./CameraSource");
+const {Categories, Service, Characteristic} = require("hap-nodejs");
 
 module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessory {
     constructor(conf) {
@@ -17,12 +18,12 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
             id = id.substr(0, 12);
         }
         var uuid = hap.uuid.generate("homebridge-website-to-camera:" + id);
-        super(name, uuid, hap.Accessory.Categories.CAMERA);
-        this.getService(hap.Service.AccessoryInformation)
-            .setCharacteristic(hap.Characteristic.Manufacturer, "David")
-            .setCharacteristic(hap.Characteristic.Model, "Website")
-            .setCharacteristic(hap.Characteristic.SerialNumber, id)
-            .setCharacteristic(hap.Characteristic.FirmwareRevision, packageJSON.version);
+        super(name, uuid, Categories.CAMERA);
+        this.getService(Service.AccessoryInformation)
+            .setCharacteristic(Characteristic.Manufacturer, "David")
+            .setCharacteristic(Characteristic.Model, "Website")
+            .setCharacteristic(Characteristic.SerialNumber, id)
+            .setCharacteristic(Characteristic.FirmwareRevision, packageJSON.version);
         this.on("identify", function (paired, callback) {
             log("identify");
             if (!!callback) {
