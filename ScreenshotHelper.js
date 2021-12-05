@@ -16,6 +16,13 @@ ScreenshotHelper.prototype.sleep = function timeout(ms) {
 };
 
 ScreenshotHelper.prototype.getScreenshot = async function (width, height, networkTimeout, renderTimeout) {
+    const page = await this.getPage(width, height, networkTimeout, renderTimeout);
+    const screenshot = await this.makeScreenshot(page)
+    page.close();
+    return screenshot;
+};
+
+ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeout, renderTimeout) {
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
         const isRoot = username.sync() === "root";
@@ -37,8 +44,11 @@ ScreenshotHelper.prototype.getScreenshot = async function (width, height, networ
     await page.goto(this.url, {waitUntil: 'networkidle2', timeout: networkTimeout});
     this.log("Loading finished, waiting " + renderTimeout + "ms before taking screenshot");
     await this.sleep(renderTimeout);
+    return page;
+};
+
+ScreenshotHelper.prototype.makeScreenshot = async function (page) {
     const screenshot = await page.screenshot({type: "jpeg"});
     this.log("Created screenshot");
-    page.close();
     return screenshot;
 };
