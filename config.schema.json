@@ -69,6 +69,10 @@
             "livePort": {
               "title": "Port for Live-Stream",
               "type": "integer"
+            },
+            "jsFile": {
+              "title": "Path to custom JS file",
+              "type": "string"
             }
           }
         }

@@ -1,14 +1,16 @@
-const puppeteer = require('puppeteer-core');
-const username = require('username');
+const puppeteer = require("puppeteer-core");
+const username = require("username");
+const fs = require("fs");
 
 module.exports = ScreenshotHelper;
 
-function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser", ignoreHTTPSErrors = false) {
+function ScreenshotHelper(log, url, chromiumPath = "/usr/bin/chromium-browser", ignoreHTTPSErrors = false, jsFile = undefined) {
     this.log = log;
     this.url = url;
     this.chromiumPath = chromiumPath;
     this.ignoreHTTPSErrors = ignoreHTTPSErrors;
     this.log("Initialized ScreenshotHelper");
+    this.jsFile = jsFile;
 }
 
 ScreenshotHelper.prototype.sleep = function timeout(ms) {
@@ -31,7 +33,7 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
                 executablePath: this.chromiumPath,
                 headless: true,
                 ignoreHTTPSErrors: this.ignoreHTTPSErrors,
-                args: isRoot ? ['--no-sandbox'] : []
+                args: isRoot ? ["--no-sandbox"] : []
             }
         );
         this.log("Chromium started");
@@ -41,9 +43,12 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
     this.log("Setting Viewport to " + width + "x" + height);
     await page.setViewport({width: width, height: height});
     this.log("Going to page: " + this.url);
-    await page.goto(this.url, {waitUntil: 'networkidle2', timeout: networkTimeout});
+    await page.goto(this.url, {waitUntil: "networkidle2", timeout: networkTimeout});
     this.log("Loading finished, waiting " + renderTimeout + "ms before taking screenshot");
     await this.sleep(renderTimeout);
+    if (!!this.jsFile) {
+        await this.addJs(page, this.jsFile);
+    }
     return page;
 };
 
@@ -53,4 +58,13 @@ ScreenshotHelper.prototype.makeScreenshot = async function (page, doLog = true) 
         this.log("Created screenshot");
     }
     return screenshot;
+};
+
+ScreenshotHelper.prototype.refresh = async function (page, networkTimeout) {
+    await page.reload({waitUntil: "networkidle2", timeout: networkTimeout});
+};
+
+ScreenshotHelper.prototype.addJs = async function (page, jsFile) {
+    const file = fs.readFileSync(jsFile, "utf8");
+    await page.addScriptTag({ content: file });
 };

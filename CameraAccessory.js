@@ -33,7 +33,7 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
                     callback();
                 }
             });
-            this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath, conf.ignoreHTTPSErrors);
+            this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath, conf.ignoreHTTPSErrors, conf.jsFile);
             new CameraServer(hap, conf, log);
         } else {
             super(name, uuid, Categories.CAMERA);

@@ -64,6 +64,7 @@ With e.g. `scale` set to `2` (default) the virtual browser window is set to this
 * `renderTimeout` timeout in ms for waiting AFTER the page has loaded before taking the screenshot. userful for PWAs. (defaults to 1ms)
 * `ignoreHTTPSErrors` ignore HTTPS errors, useful for self-signed certificates (defaults to `false`)
 * `cacheTime` will cache the image for the given time (in seconds) and a new screenshot will be created only if the time since the last screenshot is bigger than the given time
+* `jsFile` specify the full path of a custom JS-file that will be injected to the page (e.g. if you want to hide cookie-banners)
 * `live` enabled live mode to use with ffmpeg plugin (defaults to `false`). See below!
 * `liveSnapshotInterval` takes a screenshot of the website in the specified interval (in milliseconds). 1000 is a good value to start with.
 * `liveRefreshInterval` how often the page should be reloaded in live-mode (in milliseconds). If live mode is not enabled the page will be opened every time a screenshot is taken so refreshing is not needed.
