@@ -47,8 +47,10 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
     return page;
 };
 
-ScreenshotHelper.prototype.makeScreenshot = async function (page) {
+ScreenshotHelper.prototype.makeScreenshot = async function (page, doLog = true) {
     const screenshot = await page.screenshot({type: "jpeg"});
-    this.log("Created screenshot");
+    if (doLog) {
+        this.log("Created screenshot");
+    }
     return screenshot;
 };

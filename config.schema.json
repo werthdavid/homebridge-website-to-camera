@@ -53,6 +53,22 @@
             "cacheTime": {
               "title": "Cache Time",
               "type": "integer"
+            },
+            "live": {
+              "title": "Live mode",
+              "type": "string"
+            },
+            "liveSnapshotInterval": {
+              "title": "Snapshot interval (Live mode)",
+              "type": "integer"
+            },
+            "liveRefreshInterval": {
+              "title": "Page refresh interval (Live mode)",
+              "type": "integer"
+            },
+            "livePort": {
+              "title": "Port for Live-Stream",
+              "type": "integer"
             }
           }
         }
