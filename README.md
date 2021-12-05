@@ -2,7 +2,9 @@
 
 **Homebridge plugin for displaying a Website (intended for Google Maps-->Traffic) as Camera**
 
-[![NPM version](https://badge.fury.io/js/homebridge-website-to-camera.svg)](https://npmjs.org/package/homebridge-website-to-camera) [![Dependency Status](https://david-dm.org/werthdavid/homebridge-website-to-camera.svg)](https://david-dm.org/werthdavid/homebridge-website-to-camera) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) [![Downloads](https://img.shields.io/npm/dm/homebridge-website-to-camera.svg)](https://npmjs.org/package/homebridge-website-to-camera)
+[![NPM version](https://badge.fury.io/js/homebridge-website-to-camera.svg)](https://npmjs.org/package/homebridge-website-to-camera) 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) 
+[![Downloads](https://img.shields.io/npm/dm/homebridge-website-to-camera.svg)](https://npmjs.org/package/homebridge-website-to-camera)
 
 
 <img width="350" src="https://werthdavid.github.io/homebridge-website-to-camera/sample.png">
@@ -70,6 +72,7 @@ In some cases, the camera is not visible in Home-App:
 * Press `Add device`
 * Press `Code missing`
 * Select Camera
+* Provide the code from homebridge startup output (as stated in your config.json)
 
 # Background
 
