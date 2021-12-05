@@ -10,7 +10,7 @@ function CameraServer(hap, conf, log) {
     this.hap = hap;
     this.log = log;
     this.conf = conf;
-    this.screenshotHelper = new ScreenshotHelper(log, this.conf.url, this.conf.chromiumPath, this.conf.ignoreHTTPSErrors);
+    this.screenshotHelper = new ScreenshotHelper(log, this.conf.url, this.conf.chromiumPath, this.conf.ignoreHTTPSErrors, this.conf.jsFile);
 
     let networkTimeout = this.conf.timeout || 10000;
     let renderTimeout = this.conf.renderTimeout || 1;
@@ -38,7 +38,7 @@ function CameraServer(hap, conf, log) {
 
     }).listen(this.conf.livePort || 8554);
 
-    setInterval(()=> {
+    setInterval(() => {
         if (this.openRequests.length > 0 && !!this.page) {
             this.screenshotHelper.makeScreenshot(this.page, false).then(img => {
                 for (let i = 0; i < this.openRequests.length; i++) {
@@ -48,4 +48,15 @@ function CameraServer(hap, conf, log) {
             });
         }
     }, (this.conf.liveSnapshotInterval || 1000));
+
+    this.log(this.conf.liveRefreshInterval)
+    if (this.conf.liveRefreshInterval > 0) {
+        setInterval(() => {
+            if (this.openRequests.length > 0 && !!this.page) {
+                this.log.debug("Refreshing page");
+                let networkTimeout = this.conf.timeout || 10000;
+                this.screenshotHelper.refresh(this.page, networkTimeout);
+            }
+        }, (this.conf.liveRefreshInterval));
+    }
 }
