@@ -1,78 +1,101 @@
 {
-  "pluginAlias": "website-camera",
-  "pluginType": "platform",
-  "singular": true,
-  "headerDisplay": "Homebridge plugin for displaying a Website as Camera.",
-  "footerDisplay": "Visit the [Project Page](https://github.com/werthdavid/homebridge-website-to-camera) if you have more questions.",
-  "schema": {
-    "type": "object",
-    "additionalProperties": true,
-    "properties": {
-      "platform": {
-        "type": "string"
+  "pluginAlias":"website-camera",
+  "pluginType":"platform",
+  "singular":true,
+  "headerDisplay":"Homebridge plugin for displaying a Website as Camera.",
+  "footerDisplay":"Visit the [Project Page](https://github.com/werthdavid/homebridge-website-to-camera) if you have more questions.",
+  "schema":{
+    "type":"object",
+    "additionalProperties":true,
+    "properties":{
+      "platform":{
+        "type":"string"
       },
-      "cameras": {
-        "type": "array",
-        "additionalItems": true,
-        "items": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "name": {
-              "title": "Name",
-              "type": "string"
+      "cameras":{
+        "type":"array",
+        "additionalItems":true,
+        "items":{
+          "type":"object",
+          "additionalProperties":true,
+          "properties":{
+            "name":{
+              "title":"Name of the Camera",
+              "type":"string",
+              "required": true
             },
-            "url": {
-              "title": "URL",
-              "type": "string"
+            "url":{
+              "title":"URL of the Website to display",
+              "type":"string",
+              "required": true
             },
-            "height": {
-              "title": "Height",
-              "type": "integer"
+            "height":{
+              "title":"Height of the Browser-window (leave empty to use device width)",
+              "type":"integer"
             },
-            "width": {
-              "title": "Width",
-              "type": "integer"
+            "width":{
+              "title":"Width of the Browser-window (leave empty to use device height)",
+              "type":"integer"
             },
-            "timeout": {
-              "title": "Timeout",
-              "type": "integer"
+            "scale":{
+              "title":"Scale (if height/width is used)",
+              "type":"integer"
             },
-            "renderTimeout": {
-              "titel": "Render Timeout",
-              "type": "integer"
+            "timeout":{
+              "title":"Timeout of the page before loading is cancelled (ms)",
+              "type":"integer",
+              "default": "10000"
             },
-            "scale": {
-              "title": "Scale",
-              "type": "integer"
+            "renderTimeout":{
+              "titel":"Render Timeout (time in ms after page is loaded and before screenshot is taken) (ms)",
+              "type":"integer",
+              "default": "1"
             },
-            "chromiumPath": {
-              "title": "Chromium Path",
-              "type": "string"
+            "cacheTime":{
+              "title":"Cache Time (enable this if you want to cache the image for the given time)",
+              "type":"integer"
             },
-            "cacheTime": {
-              "title": "Cache Time",
-              "type": "integer"
+            "chromiumPath":{
+              "title":"Chromium Path",
+              "type":"string",
+              "default": "/usr/bin/chromium-browser"
             },
-            "live": {
-              "title": "Live mode",
-              "type": "string"
+            "jsFile":{
+              "title":"Path to custom JS file",
+              "type":"string"
             },
-            "liveSnapshotInterval": {
-              "title": "Snapshot interval (Live mode)",
-              "type": "integer"
+            "live":{
+              "title":"Live mode",
+              "type":"string",
+              "default": "false",
+              "oneOf": [
+                {
+                  "title": "active",
+                  "enum": [
+                    "true"
+                  ]
+                },
+                {
+                  "title": "inactive (only screenshot)",
+                  "enum": [
+                    "false"
+                  ]
+                }
+              ],
+              "required": true
             },
-            "liveRefreshInterval": {
-              "title": "Page refresh interval (Live mode)",
-              "type": "integer"
+            "liveSnapshotInterval":{
+              "title":"Snapshot interval (Live mode)",
+              "type":"integer",
+              "default": "1000"
             },
-            "livePort": {
-              "title": "Port for Live-Stream",
-              "type": "integer"
+            "liveRefreshInterval":{
+              "title":"Page refresh interval (Live mode)",
+              "type":"integer"
             },
-            "jsFile": {
-              "title": "Path to custom JS file",
-              "type": "string"
+            "livePort":{
+              "title":"Port for Live-Stream",
+              "type":"integer",
+              "default": "8554"
             }
           }
         }
