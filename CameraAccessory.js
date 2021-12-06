@@ -2,7 +2,6 @@
 const packageJSON = require("./package.json");
 const CameraSource = require("./CameraSource");
 const CameraServer = require("./CameraServer");
-const {Categories, Service, Characteristic} = require("hap-nodejs");
 const ScreenshotHelper = require("./ScreenshotHelper");
 
 module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessory {
@@ -21,12 +20,12 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
         }
         var uuid = hap.uuid.generate("homebridge-website-to-camera:" + id);
         if (conf.live === "true") {
-            super(name, uuid, Categories.OTHER);
-            this.getService(Service.AccessoryInformation)
-                .setCharacteristic(Characteristic.Manufacturer, "David")
-                .setCharacteristic(Characteristic.Model, "Website")
-                .setCharacteristic(Characteristic.SerialNumber, id)
-                .setCharacteristic(Characteristic.FirmwareRevision, packageJSON.version);
+            super(name, uuid, hap.Categories.OTHER);
+            this.getService(hap.Service.AccessoryInformation)
+                .setCharacteristic(hap.Characteristic.Manufacturer, "David")
+                .setCharacteristic(hap.Characteristic.Model, "Website")
+                .setCharacteristic(hap.Characteristic.SerialNumber, id)
+                .setCharacteristic(hap.Characteristic.FirmwareRevision, packageJSON.version);
             this.on("identify", function (paired, callback) {
                 log("identify");
                 if (!!callback) {
