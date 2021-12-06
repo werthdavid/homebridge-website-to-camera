@@ -103,7 +103,7 @@ you enable live-streaming via the [homebridge-camera-ffmpeg](https://github.com/
             {
               "name": "Website 1",
               "url": "https://github.com",
-              "live": "true"
+              "live": "true",
               "liveSnapshotInterval": 1000,
               "liveRefreshInterval": 5000,
               "livePort": 8554
