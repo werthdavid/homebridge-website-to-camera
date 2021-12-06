@@ -128,6 +128,11 @@ you enable live-streaming via the [homebridge-camera-ffmpeg](https://github.com/
 :grey_exclamation: if `live` is enabled, the website-to-camera plugin will not expose a camera on its own! 
 There will only be a server listening on the given port that offers a MJPEG live-stream.
 
+## Live-mode FPS
+
+If you set `liveRefreshInterval` to 33, the stream will be served with about 30fps. This will consume CPU accordingly.
+It does work but I recommend setting it to a value >= 1000 (so one picture per second) as this plugin is not optimized
+for fast live videos.
 
 # Background
 
