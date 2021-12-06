@@ -35,12 +35,12 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
             this.screenshotHelper = new ScreenshotHelper(log, conf.url, conf.chromiumPath, conf.ignoreHTTPSErrors, conf.jsFile);
             new CameraServer(hap, conf, log);
         } else {
-            super(name, uuid, Categories.CAMERA);
-            this.getService(Service.AccessoryInformation)
-                .setCharacteristic(Characteristic.Manufacturer, "David")
-                .setCharacteristic(Characteristic.Model, "Website")
-                .setCharacteristic(Characteristic.SerialNumber, id)
-                .setCharacteristic(Characteristic.FirmwareRevision, packageJSON.version);
+            super(name, uuid, hap.Categories.CAMERA);
+            this.getService(hap.Service.AccessoryInformation)
+                .setCharacteristic(hap.Characteristic.Manufacturer, "David")
+                .setCharacteristic(hap.Characteristic.Model, "Website")
+                .setCharacteristic(hap.Characteristic.SerialNumber, id)
+                .setCharacteristic(hap.Characteristic.FirmwareRevision, packageJSON.version);
             this.on("identify", function (paired, callback) {
                 log("identify");
                 if (!!callback) {
