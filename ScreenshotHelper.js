@@ -27,7 +27,7 @@ ScreenshotHelper.prototype.getScreenshot = async function (width, height, networ
 ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeout, renderTimeout) {
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
-        const isRoot = username.sync() === "root";
+        const isRoot = username.usernameSync() === "root";
         this.browser = await puppeteer.launch(
             {
                 executablePath: this.chromiumPath,
