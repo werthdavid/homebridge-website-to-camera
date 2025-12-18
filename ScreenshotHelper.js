@@ -19,12 +19,18 @@ ScreenshotHelper.prototype.sleep = function timeout(ms) {
 
 ScreenshotHelper.prototype.getScreenshot = async function (width, height, networkTimeout, renderTimeout) {
     const page = await this.getPage(width, height, networkTimeout, renderTimeout);
-    const screenshot = await this.makeScreenshot(page)
+    const screenshot = await this.makeScreenshot(page);
     page.close();
     return screenshot;
 };
 
 ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeout, renderTimeout) {
+    if (!!this.browser) {
+        if (Date.now() - this.browserOpenedAt > (5 * 60 * 1000)) {
+            await this.browser.close();
+            this.browser = undefined;
+        }
+    }
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
         const isRoot = username.usernameSync() === "root";
@@ -36,6 +42,7 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
                 args: isRoot ? ["--no-sandbox"] : []
             }
         );
+        this.browserOpenedAt = Date.now();
         this.log("Chromium started");
     }
     this.log("Opening new page");
@@ -66,5 +73,5 @@ ScreenshotHelper.prototype.refresh = async function (page, networkTimeout) {
 
 ScreenshotHelper.prototype.addJs = async function (page, jsFile) {
     const file = fs.readFileSync(jsFile, "utf8");
-    await page.addScriptTag({ content: file });
+    await page.addScriptTag({content: file});
 };
