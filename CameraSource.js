@@ -1,8 +1,8 @@
 "use strict";
 
-let ip = require("ip");
 let crypto = require("crypto");
 let ScreenshotHelper = require("./ScreenshotHelper");
+let os = require("os");
 
 module.exports = Camera;
 
@@ -151,7 +151,7 @@ Camera.prototype.prepareStream = function (request, callback) {
         sessionInfo.audio_ssrc = ssrc;
     }
 
-    let currentAddress = ip.address();
+    let currentAddress = this.getCurrentIp();
     let addressResp = {
         address: currentAddress
     };
@@ -169,7 +169,8 @@ Camera.prototype.prepareStream = function (request, callback) {
     this.handleSnapshotRequest({
         width: 800,
         height: 600
-    }, () => {});
+    }, () => {
+    });
 };
 
 Camera.prototype.handleStreamRequest = function (request) {
@@ -205,3 +206,17 @@ Camera.prototype._createStreamControllers = function (maxStreams, options) {
         self.streamControllers.push(streamController);
     }
 };
+
+Camera.prototype.getCurrentIp = function () {
+    const interfaces = os.networkInterfaces();
+
+    for (const name of Object.values(interfaces)) {
+        for (const iface of name) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+
+    return '127.0.0.1'; // fallback
+}

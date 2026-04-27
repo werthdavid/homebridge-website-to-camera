@@ -27,6 +27,7 @@ ScreenshotHelper.prototype.getScreenshot = async function (width, height, networ
 ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeout, renderTimeout) {
     if (!!this.browser) {
         if (Date.now() - this.browserOpenedAt > (5 * 60 * 1000)) {
+            await this._shutdownBrowser(this.browser);
             await this.browser.close();
             this.browser = undefined;
         }
@@ -74,4 +75,44 @@ ScreenshotHelper.prototype.refresh = async function (page, networkTimeout) {
 ScreenshotHelper.prototype.addJs = async function (page, jsFile) {
     const file = fs.readFileSync(jsFile, "utf8");
     await page.addScriptTag({content: file});
+};
+
+ScreenshotHelper.prototype._shutdownBrowser = async function shutdown(browser) {
+    console.log("Shutting down Browser");
+    try {
+        const pages = await browser.pages();
+        let page;
+
+        console.log("Pages open:", pages.length);
+
+        for (let i = 0; i < pages.length; i++) {
+            page = pages[i];
+
+            if (page.crawler_cdp_client)
+                page.crawler_cdp_client.off('Network.requestIntercepted');
+
+            page.off("request");
+            page.off("response");
+            page.off("framenavigated");
+
+            await page.goto("about:blank");
+        }
+    } catch (e) {
+        console.error("Unexpected error when closing page:", e);
+    }
+
+    if (browser) {
+        try {
+            browser.off('disconnected');
+
+            // Give the browser 5 seconds to shut down
+            await timeout(
+                browser.close().catch((e) => {
+                    console.error("Error closing browser:", e)
+                }), 5000
+            ).catch(async () => monitorBrowserStop(browser));
+        } catch (e) {
+            console.error("Unexpected error when closing browser:", e);
+        }
+    }
 };
