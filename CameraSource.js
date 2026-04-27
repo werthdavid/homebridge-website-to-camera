@@ -155,12 +155,8 @@ Camera.prototype.prepareStream = function (request, callback) {
     let addressResp = {
         address: currentAddress
     };
-
-    if (ip.isV4Format(currentAddress)) {
-        addressResp.type = "v4";
-    } else {
-        addressResp.type = "v6";
-    }
+    // TODO maybe support v6
+    addressResp.type = "v4";
 
     response.address = addressResp;
     this.pendingSessions[this.hap.uuid.unparse(sessionID)] = sessionInfo;
