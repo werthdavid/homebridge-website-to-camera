@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer-core");
 const username = require("username");
 const fs = require("fs");
+const {timeout} = require("puppeteer-core");
 
 module.exports = ScreenshotHelper;
 
