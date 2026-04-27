@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer-core");
 const username = require("username");
 const fs = require("fs");
-const {timeout} = require("puppeteer-core");
+const promiseTimeout = require("promise-timeout");
 
 module.exports = ScreenshotHelper;
 
@@ -107,7 +107,7 @@ ScreenshotHelper.prototype._shutdownBrowser = async function shutdown(browser) {
             browser.off('disconnected');
 
             // Give the browser 5 seconds to shut down
-            await timeout(
+            await promiseTimeout.timeout(
                 browser.close().catch((e) => {
                     console.error("Error closing browser:", e)
                 }), 5000
