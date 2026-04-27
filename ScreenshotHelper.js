@@ -52,11 +52,20 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
     this.log("Setting Viewport to " + width + "x" + height);
     await page.setViewport({width: width, height: height});
     this.log("Going to page: " + this.url);
-    await page.goto(this.url, {waitUntil: "networkidle2", timeout: networkTimeout});
+    try {
+        await page.goto(this.url, {waitUntil: "networkidle2", timeout: networkTimeout});
+    } catch (err){
+        this.log("Error waiting for page to load: " + err.message);
+        this.log("I will still try to take a screenshot, but it might be incomplete.");
+    }
     this.log("Loading finished, waiting " + renderTimeout + "ms before taking screenshot");
     await this.sleep(renderTimeout);
     if (!!this.jsFile) {
-        await this.addJs(page, this.jsFile);
+        try {
+            await this.addJs(page, this.jsFile);
+        } catch (err) {
+            this.log("Error adding JS to page: " + err.message);
+        }
     }
     return page;
 };
