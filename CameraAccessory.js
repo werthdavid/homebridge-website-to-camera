@@ -48,7 +48,12 @@ module.exports = (hap, Accessory, log) => class CameraAccessory extends Accessor
                 }
             });
             const cameraSource = new CameraSource(hap, conf, log);
-            this.configureCameraSource(cameraSource);
+            if (typeof hap.CameraController === "function" && typeof this.configureController === "function") {
+                const controller = cameraSource.createController();
+                this.configureController(controller);
+            } else {
+                this.configureCameraSource(cameraSource);
+            }
         }
     }
 };

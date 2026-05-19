@@ -19,46 +19,80 @@ function Camera(hap, conf, log) {
     this.cachedImage = undefined;
     this.lastSnapshotTime = undefined;
 
-    let options = {
-        proxy: false, // Requires RTP/RTCP MUX Proxy
-        disable_audio_proxy: false, // If proxy = true, you can opt out audio proxy via this
-        srtp: true, // Supports SRTP AES_CM_128_HMAC_SHA1_80 encryption
-        video: {
-            resolutions: [
-                [1920, 1080, 30], // Width, Height, framerate
-                [320, 240, 15], // Apple Watch requires this configuration
-                [1280, 960, 30],
-                [1280, 720, 30],
-                [1024, 768, 30],
-                [640, 480, 30],
-                [640, 360, 30],
-                [480, 360, 30],
-                [480, 270, 30],
-                [320, 240, 30],
-                [320, 180, 30]
-            ],
-            codec: {
-                profiles: [0, 1, 2], // Enum, please refer StreamController.VideoCodecParamProfileIDTypes
-                levels: [0, 1, 2] // Enum, please refer StreamController.VideoCodecParamLevelTypes
-            }
-        },
-        audio: {
-            comfort_noise: false,
-            codecs: [
-                {
-                    type: "OPUS", // Audio Codec
-                    samplerate: 24 // 8, 16, 24 KHz
-                },
-                {
-                    type: "AAC-eld",
-                    samplerate: 16
-                }
-            ]
+    const videoOptions = {
+        resolutions: [
+            [1920, 1080, 30],
+            [320, 240, 15],
+            [1280, 960, 30],
+            [1280, 720, 30],
+            [1024, 768, 30],
+            [640, 480, 30],
+            [640, 360, 30],
+            [480, 360, 30],
+            [480, 270, 30],
+            [320, 240, 30],
+            [320, 180, 30]
+        ],
+        codec: {
+            profiles: [0, 1, 2],
+            levels: [0, 1, 2]
         }
     };
+
+    const audioOptions = {
+        comfort_noise: false,
+        codecs: [
+            {
+                type: "OPUS",
+                samplerate: 24
+            },
+            {
+                type: "AAC-eld",
+                samplerate: 16
+            }
+        ]
+    };
+
+    this.controllerOptions = {
+        cameraStreamCount: 2,
+        delegate: this,
+        streamingOptions: {
+            supportedCryptoSuites: [
+                this.hap.SRTPCryptoSuites ? this.hap.SRTPCryptoSuites.AES_CM_128_HMAC_SHA1_80 : 0
+            ],
+            video: videoOptions,
+            audio: audioOptions
+        }
+    };
+
+    this.legacyStreamOptions = {
+        proxy: false,
+        disable_audio_proxy: false,
+        srtp: true,
+        video: videoOptions,
+        audio: audioOptions
+    };
+
     this.createCameraControlService();
-    this._createStreamControllers(2, options)
+    this._createStreamControllers(2, this.legacyStreamOptions);
 }
+
+Camera.prototype.createController = function () {
+    const controller = new this.hap.CameraController(this.controllerOptions, true);
+    this.controller = controller;
+    return controller;
+};
+
+Camera.prototype.normalizeSessionIdentifier = function (sessionID) {
+    if (typeof sessionID === "string") {
+        return sessionID;
+    }
+    if (Buffer.isBuffer(sessionID) || sessionID instanceof Uint8Array) {
+        return this.hap.uuid.unparse(sessionID);
+    }
+
+    return String(sessionID);
+};
 
 Camera.prototype.handleSnapshotRequest = function (request, callback) {
     let width = this.conf.width || (request.width * (this.conf.scale || 1.5));
@@ -159,23 +193,29 @@ Camera.prototype.prepareStream = function (request, callback) {
     addressResp.type = "v4";
 
     response.address = addressResp;
-    this.pendingSessions[this.hap.uuid.unparse(sessionID)] = sessionInfo;
+    this.pendingSessions[this.normalizeSessionIdentifier(sessionID)] = sessionInfo;
 
-    callback(response);
+    if (callback.length >= 2) {
+        callback(undefined, response);
+    } else {
+        callback(response);
+    }
     this.handleSnapshotRequest({
         width: 800,
         height: 600
-    }, () => {
-    });
+    }, () => {});
 };
 
-Camera.prototype.handleStreamRequest = function (request) {
+Camera.prototype.handleStreamRequest = function (request, callback) {
     let sessionID = request.sessionID;
     let requestType = request.type;
     if (!sessionID) {
+        if (callback) {
+            callback();
+        }
         return;
     }
-    let sessionIdentifier = this.hap.uuid.unparse(sessionID);
+    let sessionIdentifier = this.normalizeSessionIdentifier(sessionID);
 
     if (requestType === "start" && this.pendingSessions[sessionIdentifier]) {
 
@@ -187,14 +227,28 @@ Camera.prototype.handleStreamRequest = function (request) {
     if (requestType === "stop" && this.ongoingSessions[sessionIdentifier]) {
         delete this.ongoingSessions[sessionIdentifier];
     }
+
+    if (callback) {
+        callback();
+    }
 };
 
 Camera.prototype.createCameraControlService = function () {
+    if (!this.hap.Service || typeof this.hap.Service.CameraControl !== "function") {
+        this.log.debug("CameraControl service is not available in this Homebridge/HAP version; skipping legacy control service.");
+        return;
+    }
+
     let controlService = new this.hap.Service.CameraControl();
     this.services.push(controlService);
 };
 
 Camera.prototype._createStreamControllers = function (maxStreams, options) {
+    if (typeof this.hap.StreamController !== "function") {
+        this.log.debug("Legacy StreamController is not available in this Homebridge/HAP version; using CameraController instead.");
+        return;
+    }
+
     let self = this;
     for (let i = 0; i < maxStreams; i += 1) {
         let streamController = new this.hap.StreamController(i, options, self);

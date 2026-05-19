@@ -1,5 +1,4 @@
 const puppeteer = require("puppeteer-core");
-const username = require("username");
 const fs = require("fs");
 const promiseTimeout = require("promise-timeout");
 
@@ -35,7 +34,7 @@ ScreenshotHelper.prototype.getPage = async function (width, height, networkTimeo
     }
     if (!this.browser) {
         this.log("Starting new instance of Chromium: " + this.chromiumPath);
-        const isRoot = username.usernameSync() === "root";
+        const isRoot = typeof process.getuid === "function" && process.getuid() === 0;
         this.browser = await puppeteer.launch(
             {
                 executablePath: this.chromiumPath,
