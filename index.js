@@ -25,5 +25,6 @@ Platform.prototype.didFinishLaunching = function () {
         return
     }
     const configuredAccessories = this.config.cameras.map(conf => new this.CameraAccessory(conf));
-    this.api.publishCameraAccessories("homebridge-website-to-camera", configuredAccessories);
+    const publish = this.api.publishCameraAccessories || this.api.publishExternalAccessories;
+    publish.call(this.api, "homebridge-website-to-camera", configuredAccessories);
 };
